@@ -34,7 +34,7 @@ async def main():
     user_input = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else DEFAULT_PROMPT
 
     print(f"{'='*60}")
-    print("Son of Anton — Multi-Agent Dashboard Team")
+    print("Sons of Anton — Multi-Agent Dashboard Team")
     print(f"{'='*60}")
     print(f"\nUser Request:\n{user_input}\n")
     print(f"{'='*60}\n")

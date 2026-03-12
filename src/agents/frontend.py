@@ -78,8 +78,7 @@ async def frontend_node(state: TeamState) -> dict:
                 f"3. Data-fetching hooks for any API endpoints (use generate_data_fetcher)\n"
                 f"4. Page-level components for each route (use scaffold_page_component)\n"
                 f"5. Any additional UI components (use scaffold_nextjs_component)\n\n"
-                f"Adapt the architecture to what the user actually asked for — "
-                f"do not assume it is always a dashboard.\n\n"
+                f"Adapt the architecture to what the user actually asked for. "
                 f"Use the tools for each deliverable."
             ),
         }

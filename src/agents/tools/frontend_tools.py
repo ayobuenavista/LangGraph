@@ -201,7 +201,7 @@ def generate_data_fetcher(
 @tool
 def scaffold_page_layout(
     page_name: str = "App",
-    layout_type: str = "dashboard",
+    layout_type: str = "app",
     sections: str = '["header", "content"]',
 ) -> str:
     """Generate a responsive page layout using Tailwind.

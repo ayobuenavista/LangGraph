@@ -62,7 +62,7 @@ async def qa_node(state: TeamState) -> dict:
         {
             "role": "user",
             "content": (
-                f"Perform a complete quality review of the dashboard project.\n\n"
+                f"Perform a complete quality review of the project.\n\n"
                 f"Original user request: {state.user_request}\n\n"
                 f"Code to review:\n{code_summary}\n\n"
                 f"Requirements: {requirements}\n"

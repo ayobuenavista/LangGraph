@@ -50,19 +50,19 @@ async def graphics_node(state: TeamState) -> dict:
     task_descriptions = "\n".join(
         f"- [{wp.id}] {wp.title}: {wp.description}"
         for wp in design_packets
-    ) or "Generate a complete style guide and design system for the dashboard."
+    ) or "Generate a complete style guide and design system for the app."
 
     input_messages = [
         {
             "role": "user",
             "content": (
-                f"Create visual design assets for a crypto/DeFi data dashboard.\n\n"
+                f"Create visual design assets for a n app.\n\n"
                 f"Research context:\n{research_context}\n\n"
                 f"Design tasks:\n{task_descriptions}\n\n"
                 f"You MUST produce:\n"
                 f"1. A color palette using the brand guide (use generate_color_palette)\n"
                 f"2. Contrast-check the palette (use check_contrast_ratio)\n"
-                f"3. Key SVG icons for the dashboard (use generate_svg_icon)\n"
+                f"3. Key SVG icons for the app (use generate_svg_icon)\n"
                 f"4. A complete Tailwind theme (use generate_tailwind_theme)\n\n"
                 f"Use the tools to generate each asset."
             ),
@@ -76,7 +76,7 @@ async def graphics_node(state: TeamState) -> dict:
     artifacts = [
         DesignArtifact(
             asset_type="style_guide",
-            name="dashboard-theme",
+            name="app-theme",
             content=final_message,
             accessibility_notes="All colors verified against WCAG 2.1 AA contrast ratios.",
         ),

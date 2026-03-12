@@ -62,7 +62,7 @@ async def backend_node(state: TeamState) -> dict:
         {
             "role": "user",
             "content": (
-                f"Build the back-end for a crypto/DeFi data dashboard.\n\n"
+                f"Build the back-end for an app based on user's request.\n\n"
                 f"Data sources from research:\n{research_context}\n\n"
                 f"Frontend components that need data:\n{frontend_context}\n\n"
                 f"Backend tasks:\n{task_descriptions}\n\n"
@@ -81,8 +81,8 @@ async def backend_node(state: TeamState) -> dict:
 
     artifacts = [
         BackendArtifact(
-            endpoint_or_model="Dashboard API",
-            file_path="api/dashboard.py",
+            endpoint_or_model="App API",
+            file_path="api/backend.py",
             code=final_message,
             language="python",
         ),

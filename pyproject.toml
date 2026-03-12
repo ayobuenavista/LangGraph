@@ -1,7 +1,7 @@
 [project]
 name = "son-of-anton"
 version = "0.1.0"
-description = "Multi-agent AI team for crypto & DeFi data dashboards"
+description = "Multi-agent AI team under the management of Anton"
 requires-python = ">=3.11"
 dependencies = [
     "langgraph>=0.3.0",

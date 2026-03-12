@@ -1,7 +1,7 @@
 {
   "dependencies": ["."],
   "graphs": {
-    "dashboard_team": "./src/agents/graph.py:build_graph"
+    "sons_of_anton": "./src/agents/graph.py:build_graph"
   },
   "env": ".env"
 }

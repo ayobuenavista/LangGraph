@@ -247,7 +247,7 @@ def generate_data_transformer(
 @tool
 def generate_api_aggregator(
     endpoints: str = '[]',
-    aggregator_name: str = "fetch_dashboard_data",
+    aggregator_name: str = "fetch_data",
 ) -> str:
     """Generate an async aggregator that fetches from multiple APIs in parallel.
 

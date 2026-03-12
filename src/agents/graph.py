@@ -120,7 +120,7 @@ def _after_revision(state: TeamState) -> str:
 # ── Graph construction ─────────────────────────────────────────────────────
 
 def build_graph() -> StateGraph:
-    """Build and compile the multi-agent dashboard team graph.
+    """Build and compile the multi-agent team graph.
 
     This is the entrypoint referenced in langgraph.json.
     """

@@ -1,4 +1,4 @@
-"""Shared state definitions for the multi-agent dashboard team."""
+"""Shared state definitions for the multi-agent team."""
 
 from __future__ import annotations
 

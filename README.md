@@ -35,7 +35,7 @@ User Request
 ## Agents
 
 | Agent | Role | LLM |
-|---|---|---|---|
+|---|---|---|
 | **Orchestrator** | Plan decomposition, routing, revision arbitration | Claude Sonnet 4.6 |
 | **Researcher** | DeFi/crypto market intelligence, API discovery | Kimi K2.5 Thinking |
 | **Graphics** | Design system, color palettes, SVGs, accessibility | Gemini 3 Flash |
@@ -67,7 +67,7 @@ Artifact lists use the `operator.add` reducer so each agent appends without over
 ## Project Structure
 
 ```
-Son_of_Anton/
+Sons_of_Anton/
 ├── langgraph.json                  # LangSmith deployment config
 ├── pyproject.toml                  # Dependencies and package metadata
 ├── run.py                          # Local test runner with streaming output
@@ -109,7 +109,7 @@ pip install -e .
 ### Run locally
 
 ```bash
-# Default demo prompt (crypto dashboard)
+# Default demo prompt (build pages)
 python run.py
 
 # Custom prompt
@@ -134,7 +134,7 @@ The `langgraph.json` config points to `build_graph` in `src/agents/graph.py` as 
 {
   "dependencies": ["."],
   "graphs": {
-    "dashboard_team": "./src/agents/graph.py:build_graph"
+    "sons_of_anton": "./src/agents/graph.py:build_graph"
   },
   "env": ".env"
 }
@@ -150,7 +150,7 @@ thread = await client.threads.create()
 
 run = await client.runs.create(
     thread["thread_id"],
-    "dashboard_team",
+    "sons_of_anton",
     input={"messages": [{"role": "user", "content": "Build a yield farming leaderboard"}]},
 )
 ```
