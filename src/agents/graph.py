@@ -21,6 +21,17 @@ from agents.qa import qa_node
 
 async def delivery_node(state: TeamState) -> dict:
     """Compile all artifacts into the final deliverable summary."""
+
+    # Simple requests already have final_output set by the orchestrator
+    if state.request_type == "simple" and state.final_output:
+        return {
+            "current_phase": "delivery",
+            "messages": [AIMessage(
+                content=state.final_output,
+                name="orchestrator",
+            )],
+        }
+
     sections = []
 
     # Research summary
@@ -103,6 +114,13 @@ async def intake_node(state: TeamState) -> dict:
 
 # ── Conditional edges ─────────────────────────────────────────────────────
 
+def _after_planning(state: TeamState) -> str:
+    """Route after planning: skip the full pipeline for simple requests."""
+    if state.request_type == "simple":
+        return "delivery"
+    return "research"
+
+
 def _after_qa(state: TeamState) -> str:
     """Route after QA: either revise or deliver."""
     if state.qa_reports:
@@ -140,9 +158,12 @@ def build_graph() -> StateGraph:
     # Set entry point
     graph.set_entry_point("intake")
 
-    # Linear pipeline: intake -> planning -> research -> design -> frontend -> backend -> qa
+    # intake -> planning -> (conditional) research or delivery
     graph.add_edge("intake", "planning")
-    graph.add_edge("planning", "research")
+    graph.add_conditional_edges("planning", _after_planning, {
+        "research": "research",
+        "delivery": "delivery",
+    })
     graph.add_edge("research", "design")
     graph.add_edge("design", "frontend")
     graph.add_edge("frontend", "backend")

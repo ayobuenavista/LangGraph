@@ -93,6 +93,10 @@ class TeamState(BaseModel):
     # The original user request
     user_request: str = ""
 
+    # Intent classification — "build" triggers the full pipeline,
+    # "simple" short-circuits to delivery (status checks, greetings, questions).
+    request_type: Literal["build", "simple"] = "build"
+
     # Orchestrator planning
     plan: list[WorkPacket] = Field(default_factory=list)
     current_phase: Literal[

@@ -22,9 +22,62 @@ def _build_llm() -> ChatAnthropic:
 # ── Planning node ───────────────────────────────────────────────────────────
 
 async def plan_node(state: TeamState) -> dict:
-    """Decompose the user request into a prioritised list of WorkPackets."""
+    """Classify intent, then either respond directly or decompose into WorkPackets."""
     llm = _build_llm()
 
+    # Step 1: Intent classification
+    classify_msg = (
+        f"The user sent the following message via Telegram:\n\n"
+        f"\"{state.user_request}\"\n\n"
+        f"Classify this message as one of:\n"
+        f"- BUILD: The user wants to create, build, or generate something "
+        f"(a dashboard, landing page, component, API, etc.)\n"
+        f"- SIMPLE: The user is asking a question, requesting a status check, "
+        f"sending a greeting, or making any request that does NOT require "
+        f"building/generating code artifacts.\n\n"
+        f"Respond with a JSON object in this exact format:\n"
+        f'{{"intent": "BUILD" or "SIMPLE", "response": "Only if SIMPLE: your direct response to the user"}}\n\n'
+        f"If intent is BUILD, set response to null.\n"
+        f"If intent is SIMPLE, write a helpful, friendly response as the "
+        f"Orchestrator of the Sons of Anton agent team. Mention the team members "
+        f"(Researcher, Graphics, Frontend, Backend, QA) if relevant.\n"
+        f"Return ONLY the JSON object."
+    )
+
+    classify_response = await llm.ainvoke([
+        SystemMessage(content=ORCHESTRATOR_PROMPT),
+        *state.messages,
+        SystemMessage(content=classify_msg),
+    ])
+
+    # Parse classification
+    classify_content = classify_response.content
+    try:
+        start = classify_content.index("{")
+        end = classify_content.rindex("}") + 1
+        classification = json.loads(classify_content[start:end])
+    except (ValueError, json.JSONDecodeError):
+        classification = {"intent": "BUILD", "response": None}
+
+    # Step 2: If simple, short-circuit — no work packets needed
+    if classification.get("intent", "").upper() == "SIMPLE":
+        direct_response = classification.get("response") or (
+            "The Sons of Anton agent team is online and ready. "
+            "All agents (Researcher, Graphics, Frontend, Backend, QA) "
+            "are standing by for your next build request."
+        )
+        return {
+            "request_type": "simple",
+            "plan": [],
+            "current_phase": "delivery",
+            "final_output": direct_response,
+            "messages": [AIMessage(
+                content=direct_response,
+                name="orchestrator",
+            )],
+        }
+
+    # Step 3: BUILD intent — decompose into WorkPackets
     planning_msg = (
         f"The user wants the following work done:\n\n"
         f"{state.user_request}\n\n"
@@ -60,6 +113,7 @@ async def plan_node(state: TeamState) -> dict:
         ]
 
     return {
+        "request_type": "build",
         "plan": packets,
         "current_phase": "research",
         "messages": [AIMessage(
